@@ -5,7 +5,7 @@ struct RLEList_t{
     char c;
     int appear;
     RLEList* next;
-};
+};//typedef declares in the header file
 
 //implement the functions here
 
@@ -19,7 +19,7 @@ int RLEListSize(RLEList list);
 
 RLEListResult RLEListRemove(RLEList list, int index);
 
-char RLEListGet(RLEList list, int index, RLEListResult *result)
+char RLEListGet(RLEList list, int index, RLEListResult *result);
 
 char* RLEListExportToString(RLEList list, RLEListResult* result);
 
