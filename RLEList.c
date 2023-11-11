@@ -10,7 +10,7 @@ struct RLEList_t{
 
 RLEList RLEListCreate()
 {
-    RLEList head = malloc(sizeof(*RLEList));
+    RLEList head = malloc(sizeof(RLEList));
     if (head == NULL){
         return NULL;
     }
@@ -156,7 +156,7 @@ int find_exported_size(RLEList list)
     {
         size +=2; // for the char and newline
         temp = list->count;
-        size += find_digit_amount(temp);
+        size += find_digit_count(temp);
         list = list->next;
     }
     return size;

@@ -149,6 +149,6 @@ char* RLEListExportToString(RLEList list, RLEListResult* result);
 * 	LIST_SUCCESS if the mapping is done successfully.
 */
 RLEListResult RLEListMap(RLEList list, MapFunction map_function);
-
-
+int find_digit_count(int num);
+int find_exported_size(RLEList list);
 #endif // HW1_RLELIST_H
