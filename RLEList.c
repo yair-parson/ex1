@@ -1,24 +1,32 @@
 #include "RLEList.h"
-#include <stdlib.h>
 struct RLEList_t{
     //TODO: implement
     char c;
     int appear;
-    RLEList* next;
+    RLEList next;
 };//typedef declares in the header file
 
 //implement the functions here
 
 RLEList RLEListCreate()
 {
-    RLEList head = malloc(sizeof(RLEList));
+    RLEList head = malloc(sizeof(*RLEList));
     if (head == NULL){
         return NULL;
     }
     return head;
 }
 
-void RLEListDestroy(RLEList list);
+void RLEListDestroy(RLEList list)
+{
+    RLEList tmp;
+    while(list != Null){
+        tmp = list;
+        list = tmp -> next;
+        free(tmp)
+    }
+    return;
+}
 
 RLEListResult RLEListAppend(RLEList list, char value);
 
