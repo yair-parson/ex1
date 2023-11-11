@@ -1,5 +1,5 @@
 #include "RLEList.h"
-
+#include <stdlib.h>
 struct RLEList_t{
     //TODO: implement
     char c;
@@ -9,7 +9,14 @@ struct RLEList_t{
 
 //implement the functions here
 
-RLEList RLEListCreate();
+RLEList RLEListCreate()
+{
+    RLEList head = malloc(sizeof(RLEList));
+    if (head == NULL){
+        return NULL;
+    }
+    return head;
+}
 
 void RLEListDestroy(RLEList list);
 
