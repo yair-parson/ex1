@@ -2,7 +2,7 @@
 struct RLEList_t{
     //TODO: implement
     char c;
-    int count;
+    int count; // equal to 1 if single char
     RLEList next;
 };//typedef declares in the header file
 
@@ -20,17 +20,59 @@ RLEList RLEListCreate()
 void RLEListDestroy(RLEList list)
 {
     RLEList tmp;
-    while(list != Null){
+    while(list != NULL){
         tmp = list;
         list = tmp -> next;
-        free(tmp)
+        free(tmp);
     }
     return;
 }
 
-RLEListResult RLEListAppend(RLEList list, char value);
+RLEListResult RLEListAppend(RLEList list, char value)
+{
+    if(list == NULL)
+    {
+        return RLE_LIST_NULL_ARGUMENT;
+    }
 
-int RLEListSize(RLEList list);
+    while(list->next != NULL) // get to the last node in the list
+    {
+        list = list->next;
+    }
+
+    if(list->c == value) // added same char two or more times in a row, need to implement the RLE method of adding it
+    {
+        list->count += 1; // add another appereance to the char
+    }
+
+    else // gotta add a new node
+    {
+        RLEList new_node = (RLEList)malloc(sizeof(*new_node)); // could use the ListCreate but the documentation says its for new lists
+        if(new_node == NULL)
+        {
+            return RLE_LIST_OUT_OF_MEMORY;
+        }
+        new_node->c = value;
+        new_node->count = 1;
+        new_node->next = NULL;
+        list->next = new_node;
+    }
+    return RLE_LIST_SUCCESS;
+}
+
+int RLEListSize(RLEList list)
+{
+    if(list == NULL)
+    {
+        return -1;
+    }
+    int size = 0;
+    while(list!= NULL)
+    {
+        size += list->count;
+    }
+    return size;
+}
 
 RLEListResult RLEListRemove(RLEList list, int index)
 {
@@ -76,13 +118,73 @@ char RLEListGet(RLEList list, int index, RLEListResult *result)
         index -= list->count;
         list = list->next;
     }
-    *result = LIST_SUCCESS;
+    *result = RLE_LIST_SUCCESS;
     return list->c;
 }
 
-char* RLEListExportToString(RLEList list, RLEListResult* result);
+char* RLEListExportToString(RLEList list, RLEListResult* result)
+{
+    if(result == NULL)
+    {
+        return NULL; // cant pass it through the result var cause its null
+    }
 
-RLEListResult RLEListMap(RLEList list, MapFunction map_function);
+    if(list == NULL)
+    {
+        *result = RLE_LIST_NULL_ARGUMENT;
+        return NULL;
+    }
+    int required_size = find_exported_size(list); // calculates total size needed for the exported string
+    char* exported_string = (char*)malloc(required_size +1); // +1 for NULL
+    int i=0;
+    while(list!=NULL)
+    {
+        exported_string[i++] = list->c;
+        
+        sprintf(exported_string, "%d", list->count); // inserting number into string
+        i += find_digit_count(list->count); // inserting the number takes up this space so gotta have i catch up with it
+        exported_string[i++] = '\n';
+    }
+    *result = RLE_LIST_SUCCESS;
+    return exported_string;
+}
+int find_exported_size(RLEList list)
+{
+    int size = 0;
+    int temp =0;
+    while(list !=NULL)
+    {
+        size +=2; // for the char and newline
+        temp = list->count;
+        size += find_digit_amount(temp);
+        list = list->next;
+    }
+    return size;
+}
+int find_digit_count(int num)
+{
+    int dig = 0;
+    while(num>0)
+    {
+        dig+=1; // for any number, any digit is a place in the array, for 10 it would be 2 places, for 165 3 and for 3 1 etc..
+        num/=10;
+    }
+    return num;
+}
+RLEListResult RLEListMap(RLEList list, MapFunction map_function)
+{
+    if(list == NULL)
+    {
+        return RLE_LIST_NULL_ARGUMENT;
+    }
+
+    while (list!=NULL)
+    {
+        list->c = map_function(list->c);
+        list = list->next;
+    }
+    return RLE_LIST_SUCCESS;
+}
 
 
 

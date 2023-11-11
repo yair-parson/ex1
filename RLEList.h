@@ -5,9 +5,12 @@
 #ifndef HW1_RLELIST_H
 #define HW1_RLELIST_H
 
+#define ABC_SIZE 26
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 /**
 * Run Length Encoding List
 *
@@ -32,7 +35,7 @@
 typedef struct RLEList_t *RLEList;
 
 /** Enum used for returning error codes from RLE list functions */
-typedef enum {
+typedef enum RLEListResult{
     RLE_LIST_SUCCESS,
     RLE_LIST_OUT_OF_MEMORY,
     RLE_LIST_NULL_ARGUMENT,
